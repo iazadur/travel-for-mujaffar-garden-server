@@ -67,6 +67,46 @@ async function run() {
             res.json(orders);
         })
 
+        // Read My Order into Ordercollection by order _Id
+        app.get('/updateOrders/:id', async (req,res) => {
+            const id = req.params.id;
+            const query = { _id: ObjectId(id) };
+            const orderItems = await OrderCollection.findOne(query)
+            res.send(orderItems);
+        })
+
+         // Read My Order into Ordercollection by order _Id
+        app.put('/updateOrder/:id', async (req, res) => {
+            const id = req.params.id;
+            const orderUpdate = req.body;
+            const filter = { _id: ObjectId(id) };
+            const options = { upsert: true };
+            const updateDoc = {
+                $set: {
+                    address: orderUpdate.address,
+                    email: orderUpdate.email,
+                    name: orderUpdate.name,
+                    phone: orderUpdate.phone,
+                    status: orderUpdate.status,
+                    fromDate: orderUpdate.fromDate,
+                    toDate: orderUpdate.toDate,
+                },
+            };
+            const result = await OrderCollection.updateOne(filter, updateDoc, options)
+            console.log('updating', id)
+            console.log('updating', result)
+            res.json(result)
+        })
+
+        // Delete Order into Ordercollection
+        app.delete("/orders/:id", async (req, res) => {
+            console.log(req.params.id);
+            const result = await OrderCollection.deleteOne({
+              _id: ObjectId(req.params.id),
+            });
+            res.send(result);
+          });
+
         // Insert Service into serviceCollection
         app.post('/addService', async (req, res) => {
             const newService = req.body;
@@ -84,22 +124,7 @@ async function run() {
         });
 
         // UPDATE API 
-    //     app.put('/updateStudent/:id', async (req, res) => {
-    //         const id = req.params.id;
-    //         const updateStudent = req.body;
-    //         const filter = { _id: ObjectId(id) };
-    //         const options = { upsert: true };
-    //         const updateDoc = {
-    //             $set: {
-    //                 name: updateStudent.name,
-    //                 phone: updateStudent.phone,
-    //                 email: updateStudent.email
-    //             },
-    //         };
-    //         const result = await studentCollection.updateOne(filter, updateDoc, options)
-    //         console.log('updating', id)
-    //         res.json(result)
-    //     })
+       
 
     }
 
