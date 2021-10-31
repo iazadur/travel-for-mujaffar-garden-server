@@ -100,7 +100,6 @@ async function run() {
 
         // Delete Order into Ordercollection
         app.delete("/orders/:id", async (req, res) => {
-            console.log(req.params.id);
             const result = await OrderCollection.deleteOne({
               _id: ObjectId(req.params.id),
             });
@@ -114,6 +113,15 @@ async function run() {
             res.json(result);
         });
 
+         // Delete Service into serviceCollection
+         app.delete("/deleteService/:id", async (req, res) => {
+            const result = await ServicesCollection.deleteOne({
+              _id: ObjectId(req.params.id),
+            });
+            res.send(result);
+          });
+
+        
 
         // Insert Service into WhyUsCollection
         app.post('/addwhyUs', async (req, res) => {
