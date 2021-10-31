@@ -94,8 +94,6 @@ async function run() {
                 },
             };
             const result = await OrderCollection.updateOne(filter, updateDoc, options)
-            console.log('updating', id)
-            console.log('updating', result)
             res.json(result)
         })
 
