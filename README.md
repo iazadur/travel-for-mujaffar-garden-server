@@ -1,7 +1,7 @@
 # Travel For Mujaffar Garden
 ### (Assignment - 11)
 
-##### Live Server: [Mujaffar Garden](https://muzaffar-garden.web.app/dashboard)
+##### Live Server: [Mujaffar Garden](https://muzaffar-garden.web.app)
 
 
 ## Features
