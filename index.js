@@ -14,7 +14,7 @@ app.use(express.json());
 // DB_PASS=p3Zi7fvfXtJMXtwc
 
 const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.ddn3a.mongodb.net/myFirstDatabase?retryWrites=true&w=majority`;
-
+console.log(uri);
 const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
 
 
@@ -27,6 +27,7 @@ async function run() {
         const ServicesCollection = database.collection("Services");
         const reviewsCollection = database.collection("reviews");
         const whyUsCollection = database.collection("whyUs");
+        const ourDestinationCollection = database.collection("OurDestinations");
         const OrderCollection = database.collection("Order");
 
 
@@ -123,15 +124,49 @@ async function run() {
 
         
 
-        // Insert Service into WhyUsCollection
-        app.post('/addwhyUs', async (req, res) => {
-            const newWhyUs = req.body;
-            console.log(newWhyUs);
-            const result = await whyUsCollection.insertOne(newWhyUs);
+        // Insert Our destination into WhyUsCollection
+        app.post('/ourDestination', async (req, res) => {
+            const destination = req.body;
+            const result = await ourDestinationCollection.insertOne(destination);
             res.json(result);
         });
 
-        // UPDATE API 
+        // Read all data from Destination
+        app.get('/destination', async (req,res) => {
+            const cursor = ourDestinationCollection.find({});
+            const destination = await cursor.toArray();
+            res.json(destination);
+        })
+
+         // Delete Service into serviceCollection
+         app.delete("/destination/:id", async (req, res) => {
+            const result = await ourDestinationCollection.deleteOne({
+              _id: ObjectId(req.params.id),
+            });
+            res.send(result);
+          });
+
+
+        // Insert Review into reviewsCollection
+        app.post('/feedBack', async (req, res) => {
+            const review = req.body;
+            const result = await reviewsCollection.insertOne(review);
+            res.json(result);
+        });
+         // Read all data from reviewsCollection
+         app.get('/feedBack', async (req,res) => {
+            const cursor = reviewsCollection.find({});
+            const review = await cursor.toArray();
+            res.json(review);
+        })
+
+         // Delete Service into reviewsCollection
+         app.delete("/feedBack/:id", async (req, res) => {
+            const result = await reviewsCollection.deleteOne({
+              _id: ObjectId(req.params.id),
+            });
+            res.send(result);
+          });
        
 
     }
